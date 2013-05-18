@@ -74,9 +74,11 @@ class ServerBase:
             self.__sendFlag(command)
             return self.__recvFlag()
 
-
-    def connect(self): #TODO should use the new send and recv functions
-        msg = ""
+    def connect(self):
+        """
+        Connects to a BFH server
+        Declares the socket, and sets value for modmanager version on server
+        """
         mySocket = socket.socket (socket.AF_INET, socket.SOCK_STREAM)
         self.socket = mySocket
         self.socket.connect ( (self.ip, self.port) )
@@ -93,6 +95,9 @@ class ServerBase:
         return msg
 
     def close(self):
+        """
+        Closes the socket
+        """
         self.socket.close()
 
 def md5(dig):
