@@ -78,6 +78,7 @@ class ServerBase:
         """
         Connects to a BFH server
         Declares the socket, and sets value for modmanager version on server
+        Returns reply from server
         """
         mySocket = socket.socket (socket.AF_INET, socket.SOCK_STREAM)
         self.socket = mySocket
