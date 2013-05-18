@@ -18,10 +18,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-import random
 import socket
 import hashlib
-from Player import *
 
 class ServerBase:
     """server object for BFH/BFP4F servers..."""
@@ -93,6 +91,9 @@ class ServerBase:
         self.socket.send(login)
         msg = mySocket.recv(100).decode("utf-8")
         return msg
+
+    def close(self):
+        self.socket.close()
 
 def md5(dig):
     md5 = hashlib.md5() #make a new md5 object
