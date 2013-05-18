@@ -63,11 +63,8 @@ class Player:
         self.score = score
         self.ping = ping
         self.ip = ip
-        if playerid[-1]  == "\\":
-            self.playerid = playerid[:-1]
-        else:
-            self.playerid = playerid
-        if vip == "1":
+        self.playerid = playerid
+        if vip == 1:
             self.vip = True
         else:
             self.vip = False
@@ -107,17 +104,13 @@ class Player:
     def getHeroId(self):
         return self.heroid
     def getDeathsSuicides(self):
-        return int(self.deaths)-int(self.suicides)
+        return self.deaths-self.suicides
     def isMod(self):
         return self.mod
     def isAdmin(self):
         return self.admin
     def isOwner(self):
         return self.owner
-    def getRank(self):
-        if self.owner: return "Owner"
-        elif self.admin: return "Admin"
-        elif self.mod: return "Moderator"
-        else: return "Player"
+
 
 
