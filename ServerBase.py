@@ -46,26 +46,37 @@ class ServerBase:
 
     def __recvFlag(self):
         """
-        Collect data if in multiple packets
+        Made for recieving large amount of data from server, recieves data until end of reply has been reached.
+        returns str
         """
-        result = self.socket.recv(256).decode("utf-8")
+        result = self.__bytesToString(self.socket.recv(512))
         while result[-3:] != "x04":
-            moreData = self.socket.recv(256).decode("utf-8")
+            moreData = self.__bytesToString(self.socket.recv(512))
             result += moreData
         return result[:-4]
 
     def __recv(self):
         """
         Collect data from last request
+        returns str
         """
-        r = self.socket.recv(256).decode("utf-8")
-        return r
+        return self.__bytesToString(self.socket.recv(256))
+
+    def __bytesToString(self, string):
+        """
+        Using .decode() removes characters needed to use some data returned and to detect the end of a servers reply
+        therefore using str() function instead and slicing b'...' away.
+        returns str
+        """
+        string = str(string)
+        return string[2:-1]
 
     def query(self, command, multi=False):
         """
         Query the server with an RCON command, set multi to True if there is a large amount of data
         command: String, excluding linebreak
         multi: Bool, used for receiving multiple packets
+        returns str
         """
         if not multi:
             self.__send(command)
