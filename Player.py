@@ -69,9 +69,6 @@ class Player:
         else:
             self.__vip = False
         self.__heroid = heroid
-        self.__mod = mod
-        self.__admin = admin
-        self.__owner = owner
 
     def getId(self):
         return self.__id
@@ -103,14 +100,7 @@ class Player:
         return self.__vip
     def getHeroId(self):
         return self.__heroid
-    def getDeathsSuicides(self):
-        return self.__deaths-self.__suicides
-    def isMod(self):
-        return self.__mod
-    def isAdmin(self):
-        return self.__admin
-    def isOwner(self):
-        return self.__owner
+
 
 
 
