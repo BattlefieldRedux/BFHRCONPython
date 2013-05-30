@@ -26,7 +26,7 @@ class BFHServer(ServerBase):
     Adds methods for interacting with a BFH server
     """
 
-    def getPlayerList(self):
+    def getPlayers(self):
         """
         Returns players current in-game.
         returns: tuple of Player objects
