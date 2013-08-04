@@ -104,7 +104,9 @@ class ServerBase:
         login = login.encode("utf-8")
         self.socket.send(login)
         msg = mySocket.recv(100).decode("utf-8")
-        return msg
+        if msg != "Authentication successful, rcon ready.\n":
+            return False
+        return True
 
     def close(self):
         """

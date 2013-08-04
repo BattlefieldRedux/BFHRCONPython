@@ -26,6 +26,64 @@ class BFHServer(ServerBase):
     Adds methods for interacting with a BFH server
     """
 
+    def isRanked(self):
+        r = self.query("exec sv.ranked")
+        if r == "0": return False
+        return True
+
+    def setRanked(self, ranked):
+        self.query("exec sv.ranked {}".format(ranked))
+
+    def getServerName(self):
+        return self.query("exec sv.serverName")
+
+    def setServerName(self, name):
+        self.query("exec sv.serverName {}".format(name))
+
+    def getPassword(self):
+        return self.query("exec sv.password")
+
+    def setPassword(self, passw):
+        self.query("exec sv.password {}".format(passw))
+
+    def getServerHost(self):
+        return self.query("exec. sv.serverCommunity")
+
+    def getWelcomeMessage(self):
+        return self.query("exec sv.welcomeMessage")
+
+    def setWelcomeMessage(self, wel):
+        self.query("exec sv.welcomeMessage {}".format(wel))
+
+    def getStartDelay(self):
+        return self.query("exec sv.startDelay")
+
+    def setStartDelay(self, st):
+        """st: int (seconds)"""
+        self.query("exec sv.startDelay {}".format(st))
+
+    def getEndDelay(self):
+        return self.query("exec sv.endDelay")
+
+    def setEndDelay(self, en):
+        """en: int (seconds)"""
+        self.query("exec sv.endDelay {}".format(en))
+
+    def getTicketRatio(self):
+        return self.query("exec sv.ticketRatio")
+
+    def setTicketRatio(self, tickets):
+        self.query("exec sv.ticketRatio {}".format(tickets))
+
+    def getRoundsPerMap(self):
+        return self.query("exec sv.roundsPerMap")
+
+    def getBannerURL(self):
+        return self.query("exec sv.bannerURL")
+
+    def setBannerURL(self, banner):
+        self.query("exec sv.bannerURL {}".format(banner))
+
     def getPlayers(self):
         """
         Returns players current in-game.
@@ -40,7 +98,7 @@ class BFHServer(ServerBase):
         playersList.pop(-1) #Ended with \\t, so creates empty item, removing it
         currentPlayers = []
         for each in playersList:
-            currentPlayers.append(Player(each[0], each[1], each[34], each[31],
+            currentPlayers.append(Player(each[0], each[1], each[34], each[4], each[8], each[31],
                 each[36], each[30], each[2], each[39], each[37], each[3], each[18], each[47], each[46], each[10]))
         return tuple(currentPlayers)
 
@@ -48,7 +106,7 @@ class BFHServer(ServerBase):
         """
         Get's new chat, only returns chat that hasn't been recieved already. So this can be called again
         and again, no need to check for repeats.
-        returns: A tuple of tuples.
+        returns: A list of tuples.
         """
         allChat = []
         chat = self.query('bf2cc clientchatbuffer')
@@ -57,7 +115,7 @@ class BFHServer(ServerBase):
         for each in chat:
             chatList = tuple(each.split("\\t"))
             allChat.append(chatList)
-        return tuple(allChat)
+        return allChat
 
     def getServerInfo(self):
         """
@@ -85,3 +143,5 @@ class BFHServer(ServerBase):
         returns: str
         """
         return self.query('kick {0} "{1}"'.format(player, reason))
+
+

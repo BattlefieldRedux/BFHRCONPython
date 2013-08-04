@@ -39,9 +39,10 @@ class Player:
     admin: bool, false by default
     owner: bool, false by default
     """
-    def __init__(self, _id, name, kit, kills, deaths, suicides, team, level, score, ping, ip, playerid, vip, heroid, mod=False, admin=False, owner=False):
+    def __init__(self, _id, name, kit, connected, alive, kills, deaths, suicides, team, level, score, ping, ip, playerid, vip, heroid, mod=False, admin=False, owner=False):
         self.__id = _id
-        self.__alive = True
+        if alive == "1": self.__alive = True
+        else: self.__alive = False
         self.__name = name
         if kit == "NA_Gunner_kit" or kit == "RA_Gunner_kit":
             self.__kit = "Gunner"
@@ -51,7 +52,8 @@ class Player:
             self.__kit = "Commando"
         elif kit == "none":
             self.__kit = "Dead"
-            self.__alive = False
+        if connected == "1": self.__connected = True
+        else: self.__connected = False
         self.__kills = kills
         self.__deaths = deaths
         self.__suicides = suicides
@@ -78,6 +80,8 @@ class Player:
         return self.__alive
     def getKit(self):
         return self.__kit
+    def isConnected(self):
+        return self.__connected
     def getKills(self):
         return self.__kills
     def getDeaths(self):
