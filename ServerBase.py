@@ -44,7 +44,7 @@ class ServerBase:
         c += "\n"
         self.socket.send(c.encode("utf-8"))
 
-    def __recvFlag(self):
+    def __recvFlag(self, raw=True):
         """
         Made for recieving large amount of data from server, recieves data until end of reply has been reached.
         returns str
@@ -53,25 +53,31 @@ class ServerBase:
         while result[-3:] != "x04":
             moreData = self.__bytesToString(self.socket.recv(512))
             result += moreData
-        return result[:-4]
+        if raw:
+            return result[:-4]
+        else:
+            return result[:-4].replace("\\t", "\t").replace("\\r", "\n").replace("\\n", "\n")
 
-    def __recv(self):
+    def __recv(self, raw=True):
         """
         Collect data from last request
         returns str
         """
-        return self.__bytesToString(self.socket.recv(256))
+        return self.__bytesToString(self.socket.recv(256), raw)
 
-    def __bytesToString(self, string):
+    def __bytesToString(self, string, raw=True):
         """
         Using .decode() removes characters needed to use some data returned and to detect the end of a servers reply
         therefore using str() function instead and slicing b'...' away.
         returns str
         """
-        string = str(string)
-        return string[2:-1]
+        if raw:
+            string = str(string)
+            return string[2:-1]
+        else:
+            return string.decode()
 
-    def query(self, command, multi=False):
+    def query(self, command, multi=False, raw=True):
         """
         Query the server with an RCON command, set multi to True if there is a large amount of data
         command: String, excluding linebreak
@@ -80,10 +86,10 @@ class ServerBase:
         """
         if not multi:
             self.__send(command)
-            return self.__recv()
+            return self.__recv(raw)
         else:
             self.__sendFlag(command)
-            return self.__recvFlag()
+            return self.__recvFlag(raw)
 
     def connect(self):
         """

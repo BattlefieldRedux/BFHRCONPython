@@ -18,8 +18,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from ServerBase import ServerBase
-from Player import Player
+from .ServerBase import *
+from .Player import *
 
 class BFHServer(ServerBase):
     """
