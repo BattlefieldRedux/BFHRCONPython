@@ -57,16 +57,16 @@ class Player:
         self.__kills = kills
         self.__deaths = deaths
         self.__suicides = suicides
-        if team == 1:
+        if int(team) == 1:
             self.__team = "National"
-        elif team == 2:
+        else:
             self.__team = "Royal"
         self.__level = level
         self.__score = score
         self.__ping = ping
         self.__ip = ip
         self.__playerid = playerid
-        if vip == 1:
+        if int(vip) == 1:
             self.__vip = True
         else:
             self.__vip = False

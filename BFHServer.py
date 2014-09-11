@@ -144,4 +144,22 @@ class BFHServer(ServerBase):
         """
         return self.query('kick {0} "{1}"'.format(player, reason))
 
+    def adminSay(self, msg):
+        """
+        Displays a message in yellow text on left side of players screen
+        :param msg: string
+        :return: string (response from server)
+        """
+        return self.query('exec game.sayAll ": {}"\n'.format(msg))
+
+    def setVipStatus(self, player, playerID, status):
+        """
+        :param player: player name - str
+        :param playerID: the account id, not hero id
+        :param status: a 1 if adding vip, 0 if removing vip
+        :return: str (response from server)
+        """
+        return self.query('exec game.setPersonaVipStatus {} {} {}\n'.format(player, playerID, status))
+
+
 
