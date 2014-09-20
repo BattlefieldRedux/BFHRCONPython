@@ -25,6 +25,30 @@ class BFHServer(ServerBase):
     """
     Adds methods for interacting with a BFH server
     """
+    def __init__(self, ip, port, password):
+        ServerBase.__init__(self,ip, port, password)
+
+        self.name = ""
+        self.mod = ""
+        self.ranked = 0
+        self.autobalance = 0
+        self.reserved = ""
+        self.mapName = ""
+        self.nextMap = ""
+        self.mapMode = ""
+        self.currentPlayers = 0
+        self.maximumPlayers = 0
+        self.joiningPlayers = 0
+        self.natTickets = 0
+        self.natSize = 0
+        self.royTickets = 0
+        self.roySize = 0
+        self.timeElapsed = 0
+        self.roundsPerMap = 0
+        self.currentRound = ""
+        self.averageLevel = 0
+        self.mode = ""
+
 
     def isRanked(self):
         r = self.query("exec sv.ranked")
@@ -109,7 +133,17 @@ class BFHServer(ServerBase):
         returns: A list of tuples.
         """
         allChat = []
-        chat = self.query('bf2cc clientchatbuffer')
+        chat = self.query('bf2cc clientchatbuffer', True)
+        chat = chat.split("\\r\\r")
+        chat.pop(-1) #empty element created at end of list, remove it
+        for each in chat:
+            chatList = tuple(each.split("\\t"))
+            allChat.append(chatList)
+        return allChat
+
+    def getServerChatBuffer(self):
+        allChat = []
+        chat = self.query('bf2cc serverchatbuffer', True)
         chat = chat.split("\\r\\r")
         chat.pop(-1) #empty element created at end of list, remove it
         for each in chat:
@@ -122,8 +156,27 @@ class BFHServer(ServerBase):
         Returns information about the server
         returns: tuple
         """
-        info = self.query('bf2cc si', True).replace("\\n", "")
-        return tuple(info.split("\\t"))
+        data = self.query('bf2cc si', True).replace("\\n", "").split("\\t")
+        if len(data) > 0:
+            self.name = data[7]
+            self.mod = data[21]
+            self.ranked = data[25]
+            self.autobalance = data[24]
+            self.reserved = data[29]
+            self.mapName = data[5]
+            self.nextMap = data[6]
+            self.mapMode = data[20]
+            self.currentPlayers = int(data[3])
+            self.maximumPlayers = int(data[2])
+            self.joiningPlayers = int(data[4])
+            self.natTickets = int(data[11])
+            self.natSize = int(data[26])
+            self.mode = data[20]
+            self.royTickets = int(data[16])
+            self.roySize = int(data[27])
+            self.timeElapsed = data[18]
+            self.roundsPerMap = data[30]
+            self.currentRound = data[31]
 
     def warnPlayer(self, player, msg):
         """
@@ -160,6 +213,19 @@ class BFHServer(ServerBase):
         :return: str (response from server)
         """
         return self.query('exec game.setPersonaVipStatus {} {} {}\n'.format(player, playerID, status))
+
+    def privateToPlayer(self, pid, msg):
+        return self.query('exec game.sayToPlayerWithId {0} "{1}"\n'.format(pid, msg))
+
+    def privateToPlayerName(self, name, msg):
+        return self.query('exec game.sayToPlayerWithName {} "{}"\n'.format(name, msg))
+
+    def privateKick(self, player):
+        """
+        Kicks a player without anyone knowing about it!
+        player: str - can be a name or there ingame ID (1-16)
+        """
+        return self.query('exec admin.kickPlayer {0}'.format(player))
 
 
 
