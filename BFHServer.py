@@ -203,7 +203,7 @@ class BFHServer(ServerBase):
         :param msg: string
         :return: string (response from server)
         """
-        return self.query('exec game.sayAll ": {}"\n'.format(msg))
+        return self.query('exec game.sayAll ": {}"'.format(msg))
 
     def setVipStatus(self, player, playerID, status):
         """
@@ -212,10 +212,10 @@ class BFHServer(ServerBase):
         :param status: a 1 if adding vip, 0 if removing vip
         :return: str (response from server)
         """
-        return self.query('exec game.setPersonaVipStatus {} {} {}\n'.format(player, playerID, status))
+        return self.query('exec game.setPersonaVipStatus {} {} {}'.format(player, playerID, status))
 
     def privateToPlayer(self, pid, msg):
-        return self.query('exec game.sayToPlayerWithId {0} "{1}"\n'.format(pid, msg))
+        return self.query('exec game.sayToPlayerWithId {0} "{1}"'.format(pid, msg))
 
     def privateToPlayerName(self, name, msg):
         return self.query('exec game.sayToPlayerWithName {} "{}"\n'.format(name, msg))
@@ -227,5 +227,12 @@ class BFHServer(ServerBase):
         """
         return self.query('exec admin.kickPlayer {0}'.format(player))
 
+    def restartMap(self):
+        return self.query('exec admin.restartMap')
 
+    def ban(self, player, reason, by):
+        return self.query('banby {0} {1} Perm "{2}"'.format(player, by, reason))
+
+    def tempBan(self, player, time, reason, by):
+        return self.query('banby {0} {1} {2} "{3} [TempBan]"'.format(player, by, time, reason))
 
